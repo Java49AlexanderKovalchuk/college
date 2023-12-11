@@ -1,6 +1,6 @@
 delete from marks;
 delete from subjects;
-delete from students_lecturers;
+ delete from students_lecturers;
 insert into students_lecturers (id, name, city, phone, birth_date, dtype)
 values (123, 'Vasya', 'Rehovot', '054-1234567', '2000-10-10', 'Student'),
 (124, 'Sara', 'Beersheva', '052-7654321', '1990-11-12','Student'),

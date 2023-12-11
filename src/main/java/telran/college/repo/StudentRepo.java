@@ -5,9 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import telran.college.dto.StudentCity;
-import telran.college.dto.StudentMark;
-import telran.college.dto.StudentPhone;
+import telran.college.dto.*;
+
 import telran.college.entities.*;
 
 public interface StudentRepo extends JpaRepository<Student, Long> {
@@ -20,17 +19,20 @@ public interface StudentRepo extends JpaRepository<Student, Long> {
 	
 	@Query(value = "SELECT st.name as name, round(avg(score)) as score " + 
 			JOIN_STUDENTS_MARKS + "group by st.name order by avg(score) desc", nativeQuery = true) 
-	List<StudentMark> studentsMarks();
+	List<NameScore> studentsMarks();
 	
-	@Query(value = "SELECT st.name as name, st.city as city " +
-			JOIN_STUDENTS_MARKS + "group by st.name, st.city"
-					+ " having count(score) < :nScores", nativeQuery = true)
-	List<StudentCity> findStudentCityLessScores(int nScores);
+	@Query(value = "SELECT st.name as name, city "
+			+ "from (select * from students_lecturers where dtype='Student') st "
+			+ "left join marks on st.id=stid "
+			+ "group by st.name, city having count(score) < :scoresThreshold", nativeQuery = true)
+	List<StudentCity> findStudentsScoresLess(int scoresThreshold);
 	
-	@Query(value = "select name, phone from students_lecturers "
-			+ "where (extract (month from birth_date)) = :nMonth"
-			+ " and dType = 'Student'", nativeQuery = true)
-	List<StudentPhone> findStudentsByBornMonth(int nMonth);
+	@Query(value="SELECT name, phone from students_lecturers"
+			+ " where EXTRACT (MONTH FROM birth_date) = :month and dtype='Student'",
+			nativeQuery = true)
+	List<NamePhone> findStudentsBurnMonth(int month);
 	
-	
+	@Query(value="SELECT sb.name as name, score " + JOIN_ALL +
+			"where st.name=:studentName", nativeQuery=true)
+	List<NameScore> findSubjectScore(String studentName);
 }

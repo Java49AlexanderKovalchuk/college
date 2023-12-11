@@ -1,6 +1,6 @@
 package telran.college.dto;
 
-public interface SubjectScores {
+public interface NamePhone {
 	String getName();
-	int getScore();
+	String getPhone();
 }

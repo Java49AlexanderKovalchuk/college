@@ -3,20 +3,14 @@ package telran.college;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.client.ExpectedCount;
 
-import telran.college.dto.LecturerHours;
-import telran.college.dto.LecturerPhone;
-import telran.college.dto.StudentCity;
-import telran.college.dto.StudentMark;
-import telran.college.dto.StudentPhone;
-import telran.college.dto.SubjectScores;
+import telran.college.dto.*;
 import telran.college.service.CollegeService;
 @SpringBootTest
 @Sql(scripts = {"db_test.sql"})
@@ -33,106 +27,76 @@ CollegeService collegeService;
 	}
 	@Test
 	void studentAvgScoreTest() {
-		List<StudentMark> studentMarks = collegeService.studentsAvgMarks();
-		studentMarks.forEach(sm -> System.out.printf("student %s, avg score %d\n", 
-				sm.getName(), sm.getScore()));
-		String[] namesStudentMarks = (String[]) studentMarks.stream()
-				.map(obj -> obj.getName()).toArray(String[]::new);
-		Integer[] scoresStudentMarks = (Integer[]) studentMarks.stream()
-				.map(obj -> obj.getScore()).toArray(Integer[]::new);
-				
-		String[] expectedNames = {"David", "Rivka", "Vasya", "Sara", "Yosef"};
-		Integer[] expectedScores = {96, 95, 83, 80, 78}; 
-		
-		assertArrayEquals(expectedNames, namesStudentMarks);
-		assertArrayEquals(expectedScores, scoresStudentMarks);
+		List<NameScore> studentMarks = collegeService.studentsAvgMarks();
+		String [] students = {"David", "Rivka", "Vasya", "Sara", "Yosef"};
+		Integer [] scores = {96, 95, 83, 80, 78}; 
+		NameScore [] studentMarksArr = studentMarks.toArray(NameScore[]::new);
+		IntStream.range(0, students.length)
+		.forEach(i -> {
+			assertEquals(students[i], studentMarksArr[i].getName());
+			assertEquals(scores[i], studentMarksArr[i].getScore());
+		});
 	}
 	@Test
-	void lecturersMostHoursTest() {
+	void lecturerMostHoursTest() {
 		List<LecturerHours> lecturerHours = collegeService.lecturersMostHours(2);
-		lecturerHours.forEach(lh -> System.out.printf("lecturer: %s hours: %d ", 
-				lh.getName(), lh.getHours()));
-		
-		String[] namesLecturerHours = lecturerHours.stream()
-				.map(obj -> obj.getName()).toArray(String[]::new);
-		Integer[] hoursLecturerHours = lecturerHours.stream()
-				.map(obj -> obj.getHours()).toArray(Integer[]::new);
-		
-		String [] expectedLecturerNames = {"Abraham", "Mozes"};
-		Integer[] expectedLecturesHours = {225, 130};
-		
-		assertArrayEquals(expectedLecturerNames, namesLecturerHours);
-		assertArrayEquals(expectedLecturesHours, hoursLecturerHours);
+		LecturerHours [] lecturerHoursArr = lecturerHours.toArray(LecturerHours[]::new);
+		String [] lecturers = {"Abraham", "Mozes"};
+		int [] hours = {225, 130};
+		IntStream.range(0, hours.length)
+		.forEach(i -> {
+			assertEquals(lecturers[i], lecturerHoursArr[i].getName());
+			assertEquals(hours[i], lecturerHoursArr[i].getHours());
+		});
 	}
 	@Test
-	void studentsCityLessMarks() {
-		List<StudentCity> studentCity = collegeService.studentsCityLessMarks(4);
-		studentCity.forEach(sc -> System.out.printf("student: %s, city: %s ",
-				sc.getName(), sc.getCity()));
-		
-		String[] names = studentCity.stream()
-				.map(obj -> obj.getName()).toArray(String[]::new);
-		String[] cities = studentCity.stream()
-				.map(obj -> obj.getCity()).toArray(String[]::new);
-				
-		String[] expectedNames = {"Rivka", "Yosef"};
-		String[] expectedCities = {"Lod", "Rehovot"};
-		
-		assertArrayEquals(expectedNames, names);
-		assertArrayEquals(expectedCities, cities);
+	void studentsBurnMonthTest() {
+		String [] namesExpected = {
+				"Vasya", "Yakob"
+		};
+		String [] phonesExpected = {
+			"054-1234567", "051-6677889"	
+		};
+		NamePhone[] studentPhonesArr = collegeService.studentsBurnMonth(10)
+				.toArray(NamePhone[]::new);
+		assertEquals(phonesExpected.length, studentPhonesArr.length);
+		IntStream.range(0,  phonesExpected.length).forEach(i -> {
+			assertEquals(namesExpected[i], studentPhonesArr[i].getName());
+			assertEquals(phonesExpected[i], studentPhonesArr[i].getPhone());
+		});
 	}
 	@Test
-	void studentPhoneByBirthMonthTest() {
-		List<StudentPhone> studentPhone = collegeService.studentByBirthMonth(5);
-		studentPhone.forEach(sp -> System.out.printf("name: %s, phone: %s ", 
-				sp.getName(), sp.getPhone()));
-		
-		String[] names = studentPhone.stream().map(obj -> obj.getName())
-				.toArray(String[]::new);
-		String[] phones = studentPhone.stream().map(obj -> obj.getPhone())
-				.toArray(String[]::new);
-		
-		String[] expectedNames = {"David"};
-		String[] expectedPhone = {"050-7334455"};
-		
-		assertArrayEquals(expectedNames, names);
-		assertArrayEquals(expectedPhone, phones);
+	void lecturesCityTest() {
+		String[]expectedNames = {
+				"Abraham", "Mozes"
+		};
+		String[] expectedPhones = {
+			"050-1111122", "054-3334567"	
+		};
+		NamePhone[] namePhones = collegeService.lecturersCity("Jerusalem")
+				.toArray(NamePhone[]::new);
+		assertEquals(expectedNames.length, namePhones.length);
+		IntStream.range(0, namePhones.length).forEach(i -> {
+			assertEquals(expectedNames[i], namePhones[i].getName());
+			assertEquals(expectedPhones[i], namePhones[i].getPhone());
+		});
 	}
 	@Test
-	void subjectScoreByStudentTest() {
-		List<SubjectScores> subjectScore = collegeService.subjectScoreByStudentName("Vasya");
-		subjectScore.forEach(ss -> System.out.printf("subject: %s, score: %d ", 
-				ss.getName(), ss.getScore()));
+	void subjectsScoresTest() {
+		String[] subjects = {
+				"Java Core", "Java Technologies", "HTML/CSS", "JavaScript", "React"
+		};
+		int[] scores = {
+				75, 60, 95, 85, 100
+		};
+		NameScore[] subjectScores = collegeService.subjectsScores("Vasya")
+				.toArray(NameScore[]::new);
+		assertEquals(scores.length, subjectScores.length);
+		IntStream.range(0, scores.length).forEach(i -> {
+			assertEquals(subjects[i], subjectScores[i].getName());
+			assertEquals(scores[i], subjectScores[i].getScore());
+		});
 		
-		String[] subjectNames = subjectScore.stream().map(obj -> obj.getName())
-				.toArray(String[]::new);
-		Integer[] subjectScores = subjectScore.stream().map(obj -> obj.getScore())
-				.toArray(Integer[]::new);
-		
-		String[] expectedSubjectNames = {"HTML/CSS", "Java Core", "Java Technologies", 
-				"JavaScript", "React"};
-		Integer[] expectedScores = {95, 75, 60, 85, 100};
-		
-		assertArrayEquals(expectedSubjectNames, subjectNames);
-		assertArrayEquals(expectedScores, subjectScores);
-	}
-	@Test
-	void lecturerPhoneByCity() {
-		List<LecturerPhone> lecturerPhone = collegeService.lecturerPhoneByCity("Jerusalem");
-		lecturerPhone.forEach(lp -> System.out.printf("lecturer: %s, phone: %s ", 
-				lp.getName(), lp.getPhone()));
-		
-		String[] lecturerNames = lecturerPhone.stream()
-				.map(obj -> obj.getName()).toArray(String[]::new);
-		String[] lecturerPhones = lecturerPhone.stream()
-				.map(obj -> obj.getPhone()).toArray(String[]::new);
-		
-		String[] expectedLecturerNames = {"Abraham", "Mozes"};
-		String[] expectedLecturerPhones = {"050-1111122", "054-3334567"};
-		
-		assertArrayEquals(expectedLecturerNames, lecturerNames);
-		assertArrayEquals(expectedLecturerPhones, lecturerPhones);
 	}
 	
-
 }

@@ -5,12 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import telran.college.dto.LecturerHours;
-import telran.college.dto.LecturerPhone;
-import telran.college.dto.StudentCity;
-import telran.college.dto.StudentMark;
-import telran.college.dto.StudentPhone;
-import telran.college.dto.SubjectScores;
+import telran.college.dto.*;
 import telran.college.repo.*;
 @Service
 @RequiredArgsConstructor
@@ -19,41 +14,41 @@ public class CollegeServiceImpl implements CollegeService {
 	final LecturerRepo lecturerRepo;
 	final SubjectRepo subjectRepo;
 	final MarkRepo markRepo;
+	
 	@Override
 	public List<String> bestStudentsSubjectType(String type, int nStudents) {
 		
 		return studentRepo.findBestStudentsSubjectType(type, nStudents);
 	}
 	@Override
-	public List<StudentMark> studentsAvgMarks() {
+	public List<NameScore> studentsAvgMarks() {
 		
 		return studentRepo.studentsMarks();
 	}
 	@Override
 	public List<LecturerHours> lecturersMostHours(int nLecturers) {
 		
-		return lecturerRepo.findLecturerNamesMostHours(nLecturers);
+		return lecturerRepo.findLecturersMostHours(nLecturers);
 	}
 	@Override
-	public List<StudentCity> studentsCityLessMarks(int nScores) {
+	public List<StudentCity> studentsScoresLess(int nThreshold) {
 		
-		return studentRepo.findStudentCityLessScores(nScores);
-		
+		return studentRepo.findStudentsScoresLess(nThreshold);
 	}
 	@Override
-	public List<StudentPhone> studentByBirthMonth(int nMonth) {
+	public List<NamePhone> studentsBurnMonth(int month) {
 		
-		return studentRepo.findStudentsByBornMonth(nMonth);
+		return studentRepo.findStudentsBurnMonth(month);
 	}
 	@Override
-	public List<SubjectScores> subjectScoreByStudentName(String stName) {
+	public List<NamePhone> lecturersCity(String city) {
 		
-		return subjectRepo.findSubjectScoresByStudent(stName);
+		return lecturerRepo.findLecturersCity(city);
 	}
 	@Override
-	public List<LecturerPhone> lecturerPhoneByCity(String city) {
+	public List<NameScore> subjectsScores(String studentName) {
 		
-		return lecturerRepo.findLecturerPhoneByCity(city);
+		return studentRepo.findSubjectScore(studentName);
 	}
 	
 	
