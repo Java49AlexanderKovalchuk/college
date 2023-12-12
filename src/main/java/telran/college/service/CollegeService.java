@@ -12,5 +12,5 @@ public interface CollegeService {
 	List<StudentCity> studentsScoresLess(int nThreshold);
 	List<NamePhone> studentsBurnMonth(int month);
 	List<NamePhone> lecturersCity(String city);
-	List<NameScore> subjectsScores(String studentName);
+	List<SubjectNameScore> subjectsScores(String studentName);
 }

@@ -50,6 +50,14 @@ CollegeService collegeService;
 		});
 	}
 	@Test
+	void studentScoresLessTest() {
+		List<StudentCity> studentCityList = collegeService.studentsScoresLess(1);
+		assertEquals(1, studentCityList.size());
+		StudentCity studentCity = studentCityList.get(0);
+		assertEquals("Rehovot", studentCity.getCity());
+		assertEquals("Yakob", studentCity.getName());
+	}
+	@Test
 	void studentsBurnMonthTest() {
 		String [] namesExpected = {
 				"Vasya", "Yakob"
@@ -73,6 +81,7 @@ CollegeService collegeService;
 		String[] expectedPhones = {
 			"050-1111122", "054-3334567"	
 		};
+		//FIXME update test for jpql
 		NamePhone[] namePhones = collegeService.lecturersCity("Jerusalem")
 				.toArray(NamePhone[]::new);
 		assertEquals(expectedNames.length, namePhones.length);
@@ -89,11 +98,11 @@ CollegeService collegeService;
 		int[] scores = {
 				75, 60, 95, 85, 100
 		};
-		NameScore[] subjectScores = collegeService.subjectsScores("Vasya")
-				.toArray(NameScore[]::new);
+		SubjectNameScore[] subjectScores = collegeService.subjectsScores("Vasya")
+				.toArray(SubjectNameScore[]::new);
 		assertEquals(scores.length, subjectScores.length);
 		IntStream.range(0, scores.length).forEach(i -> {
-			assertEquals(subjects[i], subjectScores[i].getName());
+			assertEquals(subjects[i], subjectScores[i].getSubjectName());
 			assertEquals(scores[i], subjectScores[i].getScore());
 		});
 		
