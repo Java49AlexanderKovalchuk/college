@@ -58,23 +58,24 @@ CollegeService collegeService;
 		assertEquals("Yakob", studentCity.getName());
 	}
 	@Test
-	void studentsBurnMonthTest() {
+	void studentsBornMonthTest() {
 		String [] namesExpected = {
 				"Vasya", "Yakob"
 		};
 		String [] phonesExpected = {
 			"054-1234567", "051-6677889"	
 		};
-		NamePhone[] studentPhonesArr = collegeService.studentsBurnMonth(10)
+		NamePhone[] studentPhonesArr = collegeService.studentsBornMonth(10)
 				.toArray(NamePhone[]::new);
+		
 		assertEquals(phonesExpected.length, studentPhonesArr.length);
-		IntStream.range(0,  phonesExpected.length).forEach(i -> {
+		IntStream.range(0, phonesExpected.length).forEach(i -> {
 			assertEquals(namesExpected[i], studentPhonesArr[i].getName());
 			assertEquals(phonesExpected[i], studentPhonesArr[i].getPhone());
 		});
 	}
 	@Test
-	void lecturesCityTest() {
+	void lecturersCityTest() {
 		String[]expectedNames = {
 				"Abraham", "Mozes"
 		};

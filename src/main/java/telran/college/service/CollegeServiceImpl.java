@@ -27,8 +27,8 @@ public class CollegeServiceImpl implements CollegeService {
 	}
 	@Override
 	public List<LecturerHours> lecturersMostHours(int nLecturers) {
-		
-		return lecturerRepo.findLecturersMostHours(nLecturers);
+				
+		return subjectRepo.findLecturersMostHours(nLecturers);
 	}
 	@Override
 	public List<StudentCity> studentsScoresLess(int nThreshold) {
@@ -36,14 +36,14 @@ public class CollegeServiceImpl implements CollegeService {
 		return markRepo.findStudentsScoresLess(nThreshold);
 	}
 	@Override
-	public List<NamePhone> studentsBurnMonth(int month) {
+	public List<NamePhone> studentsBornMonth(int month) {
 		
-		return studentRepo.findStudentsBurnMonth(month);
+		return studentRepo.findStudentsBornMonth(month);
 	}
 	@Override
 	public List<NamePhone> lecturersCity(String city) {
 		//TODO method with named query 
-		return null;
+		return lecturerRepo.findByCity(city);
 	}
 	@Override
 	public List<SubjectNameScore> subjectsScores(String studentName) {
