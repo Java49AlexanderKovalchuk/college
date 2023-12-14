@@ -1,6 +1,7 @@
 package telran.college.entities;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+import telran.college.dto.MarkDto;
 @Entity 
 @NoArgsConstructor
 @Table(name = "marks")
@@ -17,4 +18,5 @@ public class Mark {
 	@Column(nullable = false)
 	 int score;
 	
+		
 }

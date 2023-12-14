@@ -2,7 +2,9 @@ package telran.college;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -10,13 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import jakarta.validation.constraints.Past;
 import telran.college.dto.*;
+import telran.college.entities.Student;
+import telran.college.repo.StudentRepo;
 import telran.college.service.CollegeService;
+import telran.exeptions.NotFoundExeption;
 @SpringBootTest
 @Sql(scripts = {"db_test.sql"})
 class CollegeServiceTest {
 @Autowired
 CollegeService collegeService;
+Student st;
+StudentRepo studentRepo;
 	@Test
 	void bestStudentsTypeTest() {
 		List<String> students = collegeService.bestStudentsSubjectType("BACK_END", 2);
@@ -33,7 +41,7 @@ CollegeService collegeService;
 		NameScore [] studentMarksArr = studentMarks.toArray(NameScore[]::new);
 		IntStream.range(0, students.length)
 		.forEach(i -> {
-			assertEquals(students[i], studentMarksArr[i].getName());
+			assertEquals(students[i], studentMarksArr[i].getStudentName());
 			assertEquals(scores[i], studentMarksArr[i].getScore());
 		});
 	}
@@ -54,8 +62,8 @@ CollegeService collegeService;
 		List<StudentCity> studentCityList = collegeService.studentsScoresLess(1);
 		assertEquals(1, studentCityList.size());
 		StudentCity studentCity = studentCityList.get(0);
-		assertEquals("Rehovot", studentCity.getCity());
-		assertEquals("Yakob", studentCity.getName());
+		assertEquals("Rehovot", studentCity.getStudentCity());
+		assertEquals("Yakob", studentCity.getStudentName());
 	}
 	@Test
 	void studentsBornMonthTest() {
@@ -106,7 +114,9 @@ CollegeService collegeService;
 			assertEquals(subjects[i], subjectScores[i].getSubjectName());
 			assertEquals(scores[i], subjectScores[i].getScore());
 		});
-		
 	}
+	/*******************/
 	
+	
+
 }
