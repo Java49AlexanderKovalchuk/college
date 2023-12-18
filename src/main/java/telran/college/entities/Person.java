@@ -14,15 +14,14 @@ import telran.college.dto.PersonDto;
 
 public abstract class Person {
 	@Id
-	 long id;
+   long id;
 	@Column(nullable = false)
-	 String name;
+	String name;
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false, name = "birth_date")
-	 LocalDate birthDate;
-	 String city;
+	LocalDate birthDate;
+	String city;
 	String phone;
-	
 	protected Person(PersonDto personDto) {
 		id = personDto.id();
 		name = personDto.name();
@@ -40,6 +39,4 @@ public abstract class Person {
 		this.phone = phone;
 	}
 	
-	
-
 }

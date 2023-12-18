@@ -3,14 +3,15 @@ package telran.college.service;
 import java.util.List;
 
 import telran.college.dto.*;
+import telran.college.entities.Subject;
 
 
 public interface CollegeService {
-	List<String> bestStudentsSubjectType(String type, int nStudents);
+	List<String> bestStudentsSubjectType(SubjectType type, int nStudents);
 	List<NameScore> studentsAvgMarks();
 	List<LecturerHours> lecturersMostHours(int nLecturers);
 	List<StudentCity> studentsScoresLess(int nThreshold);
-	List<NamePhone> studentsBornMonth(int month);
+	List<NamePhone> studentsBurnMonth(int month);
 	List<NamePhone> lecturersCity(String city);
 	List<SubjectNameScore> subjectsScores(String studentName);
 	PersonDto addStudent(PersonDto personDto);
@@ -21,5 +22,5 @@ public interface CollegeService {
 	PersonDto updateLecturer(PersonDto personDto);
 	PersonDto deleteLecturer(long id);
 	SubjectDto deleteSubject(long id);
-	List<PersonDto> deleteStudentsHavingScoresLess(int nScores); 
+	List<PersonDto> deleteStudentsHavingScoresLess(int nScores);
 }
